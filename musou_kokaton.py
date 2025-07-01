@@ -72,7 +72,7 @@ class Bird(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = xy
         self.speed = 10
-
+       
     def change_img(self, num: int, screen: pg.Surface):
         """
         こうかとん画像を切り替え，画面に転送する
@@ -93,6 +93,10 @@ class Bird(pg.sprite.Sprite):
             if key_lst[k]:
                 sum_mv[0] += mv[0]
                 sum_mv[1] += mv[1]
+        if key_lst[pg.K_LSHIFT]: #左シフトキー押している間
+            self.speed = 20      #スピードを上げる
+        else:                    #それ以外
+            self.speed = 10      #元のスピードに戻す   
         self.rect.move_ip(self.speed*sum_mv[0], self.speed*sum_mv[1])
         if check_bound(self.rect) != (True, True):
             self.rect.move_ip(-self.speed*sum_mv[0], -self.speed*sum_mv[1])
@@ -256,6 +260,7 @@ def main():
 
     tmr = 0
     clock = pg.time.Clock()
+    
     while True:
         key_lst = pg.key.get_pressed()
         for event in pg.event.get():
@@ -263,6 +268,7 @@ def main():
                 return 0
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                 beams.add(Beam(bird))
+        
         screen.blit(bg_img, [0, 0])
 
         if tmr%200 == 0:  # 200フレームに1回，敵機を出現させる
