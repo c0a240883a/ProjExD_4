@@ -96,6 +96,10 @@ class Bird(pg.sprite.Sprite):
             if key_lst[k]:
                 sum_mv[0] += mv[0]
                 sum_mv[1] += mv[1]
+        if key_lst[pg.K_LSHIFT]: #左シフトキー押している間
+            self.speed = 20      #スピードを上げる
+        else:                    #それ以外
+            self.speed = 10      #元のスピードに戻す   
         self.rect.move_ip(self.speed*sum_mv[0], self.speed*sum_mv[1])
         if check_bound(self.rect) != (True, True):
             self.rect.move_ip(-self.speed*sum_mv[0], -self.speed*sum_mv[1])
@@ -330,6 +334,7 @@ def main():
 
     tmr = 0
     clock = pg.time.Clock()
+    
     while True:
         key_lst = pg.key.get_pressed()
         for event in pg.event.get():
@@ -337,6 +342,7 @@ def main():
                 return 0
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                 beams.add(Beam(bird))
+        
             if event.type == pg.KEYDOWN and event.key == pg.K_e and score.value >=20:
                 emp = Emp(emys,bombs,screen)
                 score.value -= 20
